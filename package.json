@@ -2,6 +2,9 @@
   "name": "sad-ogorod",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "14.x"
+  },
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
@@ -17,8 +20,7 @@
     "react-scripts": "5.0.0",
     "react-simple-snackbar": "^1.1.11",
     "sass": "^1.49.0",
-    "web-vitals": "^2.1.4",
-    "node": "14.17.1"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
