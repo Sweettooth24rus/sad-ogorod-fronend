@@ -5,6 +5,7 @@ import './Pickle.scss';
 
 const Pickles = () => {
     const [pickles, setPickles] = React.useState([]);
+    const isAdmin = JSON.parse(localStorage.getItem('user'));
 
     React.useEffect(() => {
         getPickles();
@@ -13,7 +14,11 @@ const Pickles = () => {
     const getPickles = async () => {
         const recipesResponse = await axios.get('/pickle/all')
         setPickles(recipesResponse.data.content);
-        // setWeeds(recipesResponse.data.content)
+    }
+
+    const deletePickle = async id => {
+        await axios.delete(`/pickle/${id}`);
+        getPickles();
     }
 
     return(
@@ -22,12 +27,14 @@ const Pickles = () => {
             {JSON.parse(localStorage.getItem('user')).role === 'ADMIN' && <Link style={{textDecoration: 'none', color: 'green'}} to={'/pickle/add'}>Добавить соленье</Link>}
             {pickles.map(recipe => {
                 return(
-                <Link className={'Recipes__recipeBlock'} to={`/pickle/${recipe.id}`}>
+                <div className={'Recipes__recipeBlock'} >
                     <img src={axios.defaults.baseURL + `file/${recipe.photo.uuid}`} className={'Recipes__image'} />
-                    <div>
-                        <p className={'Recipes__title'}>{recipe.name}</p>
+                    <div style={{position: 'relative', width: '60%'}}>
+                        <Link to={`/pickle/${recipe.id}`} style={{textDecoration: 'none', color: 'green'}} className={'Recipes__title'}>{recipe.name}</Link>
+                        {isAdmin && <Link to={`/pickle/${recipe.id}/edit`}><img style={{position: 'absolute', top: 0, right: 40}} src="https://img.icons8.com/ios/30/000000/edit--v1.png"/></Link>}
+                        {isAdmin && <img onClick={() => deletePickle(recipe.id)} style={{position: 'absolute', top: 0, right: 0, zIndex: 10}} src="https://img.icons8.com/wired/30/000000/filled-trash.png"/>}
                     </div>
-                </Link>);
+                </div>);
             })}
         </div>
     )
